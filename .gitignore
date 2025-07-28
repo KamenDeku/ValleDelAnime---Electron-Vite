@@ -10,12 +10,15 @@ lerna-debug.log*
 node_modules
 dist
 out
+build
 .DS_Store
 .eslintcache
 *.log*
+.editorconfig
 .env
 
 # Editor directories and files
+.vscode
 .vscode/*
 !.vscode/extensions.json
 .idea
