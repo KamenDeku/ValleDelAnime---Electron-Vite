@@ -1,10 +1,15 @@
 # puntodeventa
 
-An Electron application with React and TypeScript
+An POS application with:
+- Electron-Vite
+- React
+- Biome
+- Typescript
+- Tailwind
 
 ## Recommended IDE Setup
 
-- [VSCode](https://code.visualstudio.com/) + [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) + [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
+- [VSCode](https://code.visualstudio.com/) + [Biome](https://marketplace.visualstudio.com/items?itemName=biomejs.biome)
 
 ## Project Setup
 

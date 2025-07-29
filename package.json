@@ -3,8 +3,7 @@
   "version": "1.0.0",
   "description": "An Electron application with React and TypeScript",
   "main": "./out/main/index.js",
-  "author": "example.com",
-  "homepage": "https://electron-vite.org",
+  "author": "Javier Dominguez",
   "scripts": {
     "format": "biome format .",
     "lint": "biome lint .",
@@ -14,28 +13,32 @@
     "typecheck": "npm run typecheck:node && npm run typecheck:web",
     "start": "electron-vite preview",
     "dev": "electron-vite dev",
-    "build": "npm run typecheck && electron-vite build",
+    "build": "cross-env NODE_ENV=development npm run typecheck && electron-vite build",
+    "gen": "npm run build && npm run dev",
     "postinstall": "electron-builder install-app-deps",
     "build:unpack": "npm run build && electron-builder --dir",
-    "build:win": "npm run build && electron-builder --win",
-    "build:mac": "electron-vite build && electron-builder --mac",
-    "build:linux": "electron-vite build && electron-builder --linux"
+    "build:win": "cross-env NODE_ENV=production npm run build && electron-builder --win",
+    "build:mac": "cross-env NODE_ENV=production npm run build && electron-builder --mac",
+    "build:linux": "cross-env NODE_ENV=production npm run build && electron-builder --linux"
   },
   "dependencies": {
     "@electron-toolkit/preload": "^3.0.2",
     "@electron-toolkit/utils": "^4.0.0",
-    "electron-updater": "^6.3.9"
+    "electron-updater": "^6.3.9",
+    "os-utils": "^0.0.14"
   },
   "devDependencies": {
+    "@biomejs/biome": "2.1.2",
     "@electron-toolkit/tsconfig": "^1.0.1",
     "@types/node": "^22.16.5",
+    "@types/os-utils": "^0.0.4",
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",
     "@vitejs/plugin-react": "^4.7.0",
+    "cross-env": "^10.0.0",
     "electron": "^37.2.3",
     "electron-builder": "^25.1.8",
     "electron-vite": "^4.0.0",
-    "@biomejs/biome": "2.1.2",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "typescript": "^5.8.3",

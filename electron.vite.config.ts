@@ -28,6 +28,10 @@ export default defineConfig({
           index: resolve(__dirname, 'index.html')
         }
       }
+    },
+    server: {
+      port: 3000,
+      strictPort: true
     }
   }
 })
