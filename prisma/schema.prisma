@@ -1,0 +1,159 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+  output          = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// Enums para limitar opciones
+
+enum HorarioTipo {
+  MATUTINO
+  VESPERTINO
+}
+
+enum Role {
+  ADMIN
+  CAJERO
+}
+
+enum UnidadMedida {
+  PIEZA
+  KG
+  LITRO
+}
+
+enum Talla {
+  CH
+  M
+  G
+  XL
+  UNICA
+}
+
+enum TipoMerma {
+  CADUCADO
+  DAÑADO
+  PERDIDO
+}
+
+// Main tables
+
+model Store {
+  id        Int         @id @default(autoincrement())
+  name      String
+  address   String?
+  phone     String?
+  image     String?
+  active    Boolean     @default(true)
+  createdAt DateTime    @default(now())
+  socials   SocialMedia[]
+}
+
+model SocialMedia {
+  id        Int      @id @default(autoincrement())
+  type      String
+  url       String
+  storeId   Int
+  store     Store   @relation(fields: [storeId], references: [id])
+}
+
+model User {
+  id        Int        @id @default(autoincrement())
+  name      String
+  role      Role
+  image     String?
+  active    Boolean     @default(true)
+  createdAt DateTime    @default(now())
+  receipts  Receipt[]
+}
+
+model Shift {
+  id        Int          @id @default(autoincrement())
+  name      HorarioTipo
+  active    Boolean      @default(true)
+  createdAt DateTime     @default(now())
+}
+
+model Product {
+  id        Int         @id @default(autoincrement())
+  name      String
+  image     String?
+  price     Float        @default(0)
+  unit      UnidadMedida?
+  size      Talla?
+  active    Boolean      @default(true)
+  createdAt DateTime     @default(now())
+  batches   ProductBatch[]
+  receiptItems ReceiptProduct[]
+}
+
+model Batch {
+  id             Int             @id @default(autoincrement())
+  name           String
+  expirationDate DateTime?
+  active         Boolean         @default(true)
+  createdAt      DateTime        @default(now())
+  products       ProductBatch[]
+}
+
+model ProductBatch {
+  id         Int        @id @default(autoincrement())
+  productId  Int
+  batchId    Int
+  active     Boolean    @default(true)
+  createdAt  DateTime   @default(now())
+  product    Product    @relation(fields: [productId], references: [id])
+  batch      Batch      @relation(fields: [batchId], references: [id])
+  logs       InventoryLog[]
+}
+
+model Supplier {
+  id        Int      @id @default(autoincrement())
+  name      String
+  address   String?
+  phone     String?
+  active    Boolean   @default(true)
+  createdAt DateTime  @default(now())
+}
+
+model InventoryLog {
+  id               Int           @id @default(autoincrement())
+  description      String
+  type             TipoMerma
+  productBatchId   Int
+  createdAt        DateTime      @default(now())
+  active           Boolean       @default(true)
+  productBatch     ProductBatch  @relation(fields: [productBatchId], references: [id])
+}
+
+model Receipt {
+  id        Int              @id @default(autoincrement())
+  name      String
+  total     Float
+  userId    Int
+  createdAt DateTime         @default(now())
+  user      User             @relation(fields: [userId], references: [id])
+  products  ReceiptProduct[]
+}
+
+model ReceiptProduct {
+  id         Int       @id @default(autoincrement())
+  productId  Int
+  receiptId  Int
+  quantity   Int
+  createdAt  DateTime  @default(now())
+  product    Product   @relation(fields: [productId], references: [id])
+  receipt    Receipt   @relation(fields: [receiptId], references: [id])
+}
+

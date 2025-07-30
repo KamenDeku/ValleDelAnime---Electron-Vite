@@ -27,6 +27,7 @@
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
     "@mui/material": "^7.2.0",
+    "@prisma/client": "^6.13.0",
     "electron-updater": "^6.3.9",
     "os-utils": "^0.0.14"
   },
@@ -42,6 +43,7 @@
     "electron": "^37.2.3",
     "electron-builder": "^25.1.8",
     "electron-vite": "^4.0.0",
+    "prisma": "^6.13.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "typescript": "^5.8.3",
