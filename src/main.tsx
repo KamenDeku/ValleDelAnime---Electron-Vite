@@ -1,4 +1,4 @@
-import './assets/main.css'
+import './ui/assets/main.css'
 
 import React from 'react';
 import { createRoot } from 'react-dom/client'
