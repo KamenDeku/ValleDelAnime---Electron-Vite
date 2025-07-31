@@ -73,9 +73,11 @@ model User {
   name      String
   role      Role
   image     String?
+  shiftId   Int
   active    Boolean     @default(true)
   createdAt DateTime    @default(now())
   receipts  Receipt[]
+  shift     Shift      @relation(fields: [shiftId], references: [id])
 }
 
 model Shift {
@@ -83,6 +85,7 @@ model Shift {
   name      HorarioTipo
   active    Boolean      @default(true)
   createdAt DateTime     @default(now())
+  users     User[]
 }
 
 model Product {
@@ -111,10 +114,12 @@ model ProductBatch {
   id         Int        @id @default(autoincrement())
   productId  Int
   batchId    Int
+  supplierId Int
   active     Boolean    @default(true)
   createdAt  DateTime   @default(now())
   product    Product    @relation(fields: [productId], references: [id])
   batch      Batch      @relation(fields: [batchId], references: [id])
+  supplier   Supplier   @relation(fields: [supplierId], references: [id])
   logs       InventoryLog[]
 }
 
@@ -125,6 +130,7 @@ model Supplier {
   phone     String?
   active    Boolean   @default(true)
   createdAt DateTime  @default(now())
+  productBatches ProductBatch[]
 }
 
 model InventoryLog {
