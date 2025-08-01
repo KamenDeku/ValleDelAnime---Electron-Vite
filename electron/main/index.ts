@@ -2,6 +2,7 @@ import { app, shell, BrowserWindow, ipcMain } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import { pollResourceUsage } from './resourceManager'
+import "./db/index";
 // @ts-ignore
 import icon from '../../resources/valleLogo.png?asset'
 

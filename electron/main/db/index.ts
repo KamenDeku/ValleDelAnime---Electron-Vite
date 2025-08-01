@@ -5,7 +5,7 @@ import path from "path";
 const app = express();
 app.use(express.json());
 
-const routesDir = path.join(__dirname, "routes");
+const routesDir = path.join(__dirname, "db", "routes");
 
 function registerRoutesFrom(dirPath: string, baseRoute = "") {
   const items = fs.readdirSync(dirPath, { withFileTypes: true });
