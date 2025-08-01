@@ -1,7 +1,7 @@
 import osUtils from 'os-utils';
 import fs from 'fs';
 
-const POLLING_INTERVAL = 500;
+const POLLING_INTERVAL = 2500;
 
 export function pollResourceUsage() {
   setInterval( async () => {

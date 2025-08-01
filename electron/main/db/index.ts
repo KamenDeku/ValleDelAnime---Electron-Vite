@@ -1,3 +1,6 @@
+import dotenv from "dotenv";
+dotenv.config();
+
 import express from "express";
 import fs from "fs";
 import path from "path";
@@ -37,12 +40,12 @@ async function initializeServer() {
   try {
     await registerRoutesFrom(routesDir);
 
-    const PORT = process.env.APP_PORT || 3001;
+    const PORT = process.env.APP_PORT || 5000;
     app.listen(PORT, () => {
       console.log("Server listening on http://localhost:" + PORT);
     });
   } catch (error) {
-    console.error("Error inicializando el servidor:", error);
+    console.error("Error at server initialization:", error);
   }
 }
 
