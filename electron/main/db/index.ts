@@ -1,36 +1,49 @@
 import express from "express";
 import fs from "fs";
 import path from "path";
+import { pathToFileURL } from "url";
 
 const app = express();
 app.use(express.json());
 
 const routesDir = path.join(__dirname, "db", "routes");
 
-function registerRoutesFrom(dirPath: string, baseRoute = "") {
+async function registerRoutesFrom(dirPath: string, baseRoute = "") {
   const items = fs.readdirSync(dirPath, { withFileTypes: true });
 
   for (const item of items) {
     const fullPath = path.join(dirPath, item.name);
-    const routePath = baseRoute + "/" + item.name.replace(/\.ts$/, "");
+    const routePath = baseRoute + "/" + item.name.replace(/\.ts$/, "").replace(/\\/g, "/");
 
     if (item.isDirectory()) {
-      registerRoutesFrom(fullPath, routePath);
+      await registerRoutesFrom(fullPath, routePath);
     } else if (item.isFile() && item.name === "route.ts") {
-      const importPath = path.resolve(fullPath);
-      import(importPath).then((module) => {
+      try {
+        const importUrl = pathToFileURL(fullPath).href;
+        const module = await import(importUrl);
+
         if (typeof module.default === "function") {
           console.log(`Cargando endpoint: ${routePath}`);
           app.use(routePath.replace("/[id]", "/:id"), module.default);
         }
-      });
+      } catch (error) {
+        console.error(`Error cargando ruta ${fullPath}:`, error);
+      }
     }
   }
 }
 
-registerRoutesFrom(routesDir);
+async function initializeServer() {
+  try {
+    await registerRoutesFrom(routesDir);
 
-const PORT = process.env.APP_PORT || 3001;
-app.listen(PORT, () => {
-  console.log("Server listening on http://localhost:" + PORT);
-});
+    const PORT = process.env.APP_PORT || 3001;
+    app.listen(PORT, () => {
+      console.log("Server listening on http://localhost:" + PORT);
+    });
+  } catch (error) {
+    console.error("Error inicializando el servidor:", error);
+  }
+}
+
+initializeServer();
